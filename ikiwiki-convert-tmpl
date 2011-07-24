@@ -1,0 +1,171 @@
+#!/usr/bin/perl
+#
+our $rcsid='$Id$';
+our $VERSION='1.0';
+
+=pod
+
+=head1 NAME
+
+ikiwiki-convert-tmpl - Convert HTML::Template files to Template::Toolkit
+
+=head1 SYNOPSIS
+
+convert-tmpl [OPTIONS] FILE [FILE ...]
+
+Options:
+
+=over 4
+
+=item -i, --inplace [I<EXT>]
+
+Replace each I<FILE> with the converted content; if an optional I<EXT>
+is given, back up the old file by appending I<EXT> to its name
+(similar to PERL's option C<-i>).
+
+=item --help         
+
+Print help text and exit
+
+=item -V, --version  
+
+Print version number and exit
+
+=back
+
+=head1 DESCRIPTION
+
+Convert an HTML::Template F<.tmpl> file to use Template::Toolkit syntax.
+
+I<Note:> All template parameters references in C<TMPL_VAR>,
+C<TMPL_IF>, etc. are lowercased!  This is to avoid Template::Toolkit
+stopping on IkiWiki's C<META> parameter, but can render a template
+invalid if you really are passing an upper- or mixed case name as a
+parameter to your template.
+
+Unless the C<--inplace> option is given, the converted content of each
+file is written to a file with the same name and a F<.TT> extension
+added.
+
+
+=head1 DOWNLOAD
+
+You can download this software from L<github|http://github.com/riccardomurri/ikiwiki>
+
+=head1 COPYRIGHT AND LICENCE
+
+Copyright (c) 2011 Riccardo Murri L<riccardo.murri@gmail.com>.
+All rights reserved.
+
+You may copy, distribute and modify this file according to the GNU GPL
+version 3 or (at your option) any later version.
+See http://www.gnu.org/licenses/gpl.html for license details.
+
+=cut
+        
+
+use strict;
+use English;
+use Getopt::Long;
+use Pod::Usage;
+
+
+sub verbose ($$);
+sub in ($@);
+
+
+# provide default for options
+my $inplace = 0;
+my $verbose = 0;
+Getopt::Long::Configure ('gnu_getopt', 'no_ignore_case');
+GetOptions (
+    'i|inplace:s' => \$inplace,
+    'verbose|v:+' => \$verbose,
+    'help'        => sub { pod2usage(-verbose => $verbose); },
+    'version|V'   => sub { print $PROGRAM_NAME ." ". $VERSION ."\n"; exit; }
+) or pod2usage();
+
+# usage if no args given
+pod2usage (-verbose => 0, -exitstatus => 1)
+    if ($#ARGV < 0);
+
+
+## main
+
+foreach my $file (@ARGV) {
+    open (INPUT, '<', $file)
+      or die ("Cannot open input file '$file': $!");
+    # read whole file
+    local $/ = undef;
+    my $text = <INPUT>;
+    close INPUT;
+
+    # perform substitutions (note: order matters!)
+    $text =~ s{<(?:!--)?\s*TMPL_ELSE\s*(?:--)?>}{[% ELSE %]}gi;
+
+    $text =~ s{<(?:!--)?\s*TMPL_IF\s+NAME=(['"]?)(\w+)\1\s*(?:--)?>}{[% IF \L$2\E %]}gi;
+    $text =~ s{<(?:!--)?\s*TMPL_IF\s+(\w+)\s*(?:--)?>}{[% IF \L$1\E %]}gi;
+    $text =~ s{<(?:!--)?\s*/TMPL_IF\s*(?:--)?>}{[% END %]}gi;
+
+    $text =~ s{<(?:!--)?\s*TMPL_INCLUDE\s+NAME=(['"]?)(\w+)\1\s*(?:--)?>}{[% INCLUDE $1$2$1 %]}gi;
+
+    $text =~ s{<(?:!--)?\s*TMPL_LOOP\s+NAME=(['"]?)(\w+)\1\s*(?:--)?>}{[% FOREACH \L$2\E %]}gi;
+    $text =~ s{<(?:!--)?\s*TMPL_LOOP\s+(\w+)\s*(?:--)?>}{[% FOREACH \L$1\E %]}gi;
+    $text =~ s{<(?:!--)?\s*/TMPL_LOOP\s*(?:--)?>}{[% END %]}gi;
+
+    $text =~ s{<(?:!--)?\s*TMPL_UNLESS\s+NAME=(['"]?)(\w+)\1\s*(?:--)?>}{[% UNLESS \L$2\E %]}gi;
+    $text =~ s{<(?:!--)?\s*TMPL_UNLESS\s+(\w+)\s*(?:--)?>}{[% UNLESS \L$1\E %]}gi;
+    $text =~ s{<(?:!--)?\s*/TMPL_UNLESS\s*(?:--)?>}{[% END %]}gi;
+
+    $text =~ s{<(?:!--)?\s*TMPL_VAR\s+NAME=(['"]?)(\w+)\1\s*(?:--)?>}{[% \L$2\E %]}gi;
+    $text =~ s{<(?:!--)?\s*TMPL_VAR\s+(\w+)\s*(?:--)?>}{[% \L$1\E %]}gi;
+
+    #$text =~ s{<\s*(/?TMPL_[A-Z]+)((\s+\w+(=(['"]?)\w+\5)?)+)?\s*/?>}{<!-- $1$2 -->}gi;
+ 
+    # output
+    my $output;
+    if ($inplace eq '') {
+        # inplace subst w/ no backup
+        $output = $file;
+    }
+    elsif ($inplace) {
+        # inplace subst w/ backup
+        rename($file, $file . $inplace)
+            or die ("Cannot backup input file '$file': $!");
+        $output = $file;
+    }
+    else {
+        # default
+        $output = $file . '.TT';
+    };
+    open(OUTPUT, '>', $output)
+        or die ("Cannot open output file '$output': $!");
+    print OUTPUT $text;
+    close OUTPUT;
+};
+
+
+## subroutines
+
+# verbose (LVL, MSG)
+#
+# Print MSG if LVL <= $verbose .
+#
+sub verbose ($$) {
+    my $lvl = shift;
+    my $msg = shift;
+    print $msg . "\n" if ($lvl <= $verbose);
+}
+
+
+# in (ITEM, LIST)
+#
+# return true if ITEM is 'eq' to some element in LIST
+#
+sub in ($@) {
+    my $item = shift;
+    return grep { $item eq $_ } @_;
+}
+
+
+__END__

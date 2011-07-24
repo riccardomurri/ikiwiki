@@ -1,72 +1,72 @@
-<TMPL_IF HTML5><article class="inlinepage"><TMPL_ELSE><div class="inlinepage"></TMPL_IF>
+[% IF html5 %]<article class="inlinepage">[% ELSE %]<div class="inlinepage">[% END %]
 
-<TMPL_IF HTML5><section class="inlineheader"><TMPL_ELSE><div class="inlineheader"></TMPL_IF>
-<TMPL_IF AUTHOR>
+[% IF html5 %]<section class="inlineheader">[% ELSE %]<div class="inlineheader">[% END %]
+[% IF author %]
 <span class="author">
-<TMPL_IF AUTHORURL>
-<a href="<TMPL_VAR AUTHORURL>"><TMPL_VAR AUTHOR></a>
-<TMPL_ELSE>
-<TMPL_VAR AUTHOR>
-</TMPL_IF>
+[% IF authorurl %]
+<a href="[% authorurl %]">[% author %]</a>
+[% ELSE %]
+[% author %]
+[% END %]
 </span>
-</TMPL_IF>
-<TMPL_IF HTML5><header class="header"><TMPL_ELSE><span class="header"></TMPL_IF>
-<TMPL_IF PERMALINK>
-<a href="<TMPL_VAR PERMALINK>"><TMPL_VAR TITLE></a>
-<TMPL_ELSE>
-<a href="<TMPL_VAR PAGEURL>"><TMPL_VAR TITLE></a>
-</TMPL_IF>
-<TMPL_IF HTML5></header><TMPL_ELSE></span></TMPL_IF>
-<TMPL_IF HTML5></section><TMPL_ELSE></div></TMPL_IF>
+[% END %]
+[% IF html5 %]<header class="header">[% ELSE %]<span class="header">[% END %]
+[% IF permalink %]
+<a href="[% permalink %]">[% title %]</a>
+[% ELSE %]
+<a href="[% pageurl %]">[% title %]</a>
+[% END %]
+[% IF html5 %]</header>[% ELSE %]</span>[% END %]
+[% IF html5 %]</section>[% ELSE %]</div>[% END %]
 
-<TMPL_IF HTML5><section class="inlinecontent"><TMPL_ELSE><div class="inlinecontent"></TMPL_IF>
-<TMPL_VAR CONTENT>
-<TMPL_IF HTML5></section><TMPL_ELSE></div></TMPL_IF>
+[% IF html5 %]<section class="inlinecontent">[% ELSE %]<div class="inlinecontent">[% END %]
+[% content %]
+[% IF html5 %]</section>[% ELSE %]</div>[% END %]
 
-<TMPL_IF HTML5><footer class="inlinefooter"><TMPL_ELSE><div class="inlinefooter"></TMPL_IF>
+[% IF html5 %]<footer class="inlinefooter">[% ELSE %]<div class="inlinefooter">[% END %]
 
 <span class="pagedate">
-Posted <TMPL_VAR CTIME>
+Posted [% ctime %]
 </span>
 
-<TMPL_IF TAGS>
-<TMPL_IF HTML5><nav class="tags"><TMPL_ELSE><span class="tags"></TMPL_IF>
+[% IF tags %]
+[% IF html5 %]<nav class="tags">[% ELSE %]<span class="tags">[% END %]
 Tags:
-<TMPL_LOOP TAGS>
-<TMPL_VAR LINK>
-</TMPL_LOOP>
-<TMPL_IF HTML5></nav><TMPL_ELSE></span></TMPL_IF>
-</TMPL_IF>
+[% FOREACH tags %]
+[% link %]
+[% END %]
+[% IF html5 %]</nav>[% ELSE %]</span>[% END %]
+[% END %]
 
-<TMPL_IF COPYRIGHT>
+[% IF copyright %]
 <div class="pagecopyright">
-<TMPL_VAR COPYRIGHT>
+[% copyright %]
 </div>
-</TMPL_IF>
+[% END %]
 
-<TMPL_IF LICENSE>
+[% IF license %]
 <div class="pagelicense">
-License: <TMPL_VAR LICENSE>
+License: [% license %]
 </div>
-</TMPL_IF>
+[% END %]
 
-<TMPL_IF HAVE_ACTIONS>
-<TMPL_IF HTML5><nav class="actions"><TMPL_ELSE><div class="actions"></TMPL_IF>
+[% IF have_actions %]
+[% IF html5 %]<nav class="actions">[% ELSE %]<div class="actions">[% END %]
 <ul>
-<TMPL_IF EDITURL>
-<li><a href="<TMPL_VAR EDITURL>" rel="nofollow">Edit</a></li>
-</TMPL_IF>
-<TMPL_IF COMMENTSLINK>
-<li><TMPL_VAR COMMENTSLINK></li>
-<TMPL_ELSE>
-<TMPL_IF DISCUSSIONLINK>
-<li><TMPL_VAR DISCUSSIONLINK></li>
-</TMPL_IF>
-</TMPL_IF>
+[% IF editurl %]
+<li><a href="[% editurl %]" rel="nofollow">Edit</a></li>
+[% END %]
+[% IF commentslink %]
+<li>[% commentslink %]</li>
+[% ELSE %]
+[% IF discussionlink %]
+<li>[% discussionlink %]</li>
+[% END %]
+[% END %]
 </ul>
-<TMPL_IF HTML5></nav><TMPL_ELSE></div></TMPL_IF>
-</TMPL_IF>
+[% IF html5 %]</nav>[% ELSE %]</div>[% END %]
+[% END %]
 
-<TMPL_IF HTML5></footer><TMPL_ELSE></div></TMPL_IF>
+[% IF html5 %]</footer>[% ELSE %]</div>[% END %]
 
-<TMPL_IF HTML5></article><TMPL_ELSE></div></TMPL_IF>
+[% IF html5 %]</article>[% ELSE %]</div>[% END %]

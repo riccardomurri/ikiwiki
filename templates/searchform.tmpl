@@ -1,6 +1,6 @@
-<form method="get" action="<TMPL_VAR SEARCHACTION>" id="searchform">
+<form method="get" action="[% searchaction %]" id="searchform">
 <div>
 <input type="text" id="searchbox" name="P" value="" size="16"
-<TMPL_IF HTML5>placeholder="search"</TMPL_IF> />
+[% IF html5 %]placeholder="search"[% END %] />
 </div>
 </form>

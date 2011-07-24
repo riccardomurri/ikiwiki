@@ -2,7 +2,7 @@
 <script type="text/javascript" src="ikiwiki/openid/openid-jquery.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	openid.init('openid_identifier','<TMPL_IF NONOPENIDFORM>nonopenidform</TMPL_IF>');
+	openid.init('openid_identifier','[% IF nonopenidform %]nonopenidform[% END %]');
 });
 </script>
 
@@ -10,7 +10,7 @@ $(document).ready(function() {
 <h2>OpenID:</h2>
 </noscript>
 
-<form action="<TMPL_VAR CGIURL>" method="get" id="openid_form">
+<form action="[% cgiurl %]" method="get" id="openid_form">
 	<fieldset>
 		<script>
 		$('fieldset').append("<legend>Select your account provider</legend>");
@@ -23,21 +23,21 @@ $(document).ready(function() {
 		</div>
 		<div id="openid_input_area">
 			<label for="openid_identifier" class="block">Enter your OpenID:</label>
-			<input id="openid_identifier" name="openid_identifier" type="text" value="<TMPL_VAR OPENID_URL>"/>
+			<input id="openid_identifier" name="openid_identifier" type="text" value="[% openid_url %]"/>
 			<input id="openid_submit" type="submit" value="Login"/>
 		</div>
-		<TMPL_IF OPENID_ERROR>
-		<div class="error"><TMPL_VAR OPENID_ERROR></div>
-		</TMPL_IF>
+		[% IF openid_error %]
+		<div class="error">[% openid_error %]</div>
+		[% END %]
 	</fieldset>
 </form>
 
 <div id="nonopenidform">
-<TMPL_IF NONOPENIDFORM>
+[% IF nonopenidform %]
 <br />
 <noscript>
 <h2>Other:</h2>
 </noscript>
-</TMPL_IF>
-<TMPL_VAR NONOPENIDFORM>
+[% END %]
+[% nonopenidform %]
 </div>

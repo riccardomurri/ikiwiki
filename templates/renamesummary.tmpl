@@ -1,26 +1,26 @@
-<TMPL_IF ERROR>
+[% IF error %]
 <p>
-<b>Failed to rename <TMPL_VAR SRC> to <TMPL_VAR DEST>: </b>
-<TMPL_VAR ERROR>
+<b>Failed to rename [% src %] to [% dest %]: </b>
+[% error %]
 </p>
-<TMPL_ELSE>
+[% ELSE %]
 <p>
-<b>Successfully renamed <TMPL_VAR SRC> to <TMPL_VAR DEST>.</b>
+<b>Successfully renamed [% src %] to [% dest %].</b>
 </p>
 <p>
-<TMPL_IF FIXEDLINKS>
-The following pages have been automatically modified to update their links to <TMPL_VAR DEST>:
+[% IF fixedlinks %]
+The following pages have been automatically modified to update their links to [% dest %]:
 <ul>
-<TMPL_LOOP FIXEDLINKS><li><TMPL_VAR PAGE></li></TMPL_LOOP>
+[% FOREACH fixedlinks %]<li>[% page %]</li>[% END %]
 </ul>
-</TMPL_IF>
-<TMPL_IF BROKENLINKS_CHECKED>
-<TMPL_IF BROKENLINKS>
-The following pages still link to <TMPL_VAR SRC>:
+[% END %]
+[% IF brokenlinks_checked %]
+[% IF brokenlinks %]
+The following pages still link to [% src %]:
 <ul>
-<TMPL_LOOP BROKENLINKS><li><TMPL_VAR PAGE></li></TMPL_LOOP>
+[% FOREACH brokenlinks %]<li>[% page %]</li>[% END %]
 </ul>
-</TMPL_IF>
-</TMPL_IF>
+[% END %]
+[% END %]
 </p>
-</TMPL_IF>
+[% END %]

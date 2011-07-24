@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <feed xmlns="http://www.w3.org/2005/Atom">
-<title><TMPL_VAR TITLE></title>
-<link href="<TMPL_VAR PAGEURL>"/>
-<link href="<TMPL_VAR FEEDURL>" rel="self" type="application/atom+xml"/>
+<title>[% title %]</title>
+<link href="[% pageurl %]"/>
+<link href="[% feedurl %]" rel="self" type="application/atom+xml"/>
 <author>
-<TMPL_IF AUTHOR>
-<name><TMPL_VAR AUTHOR></name>
-<TMPL_ELSE>
-<name><TMPL_VAR WIKINAME></name>
-</TMPL_IF>
+[% IF author %]
+<name>[% author %]</name>
+[% ELSE %]
+<name>[% wikiname %]</name>
+[% END %]
 </author>
-<TMPL_IF COPYRIGHT>
+[% IF copyright %]
 <rights type="html" xml:lang="en">
-<TMPL_IF LICENSE>
-	<TMPL_VAR LICENSE>
+[% IF license %]
+	[% license %]
 	<TMPL_VAR COPYRIGHT ESCAPE=HTML>
-<TMPL_ELSE>
+[% ELSE %]
 	<TMPL_VAR COPYRIGHT ESCAPE=HTML>
-</TMPL_IF>
+[% END %]
 </rights>
-<TMPL_ELSE>
-<TMPL_IF LICENSE>
+[% ELSE %]
+[% IF license %]
 <rights type="html">
 	<TMPL_VAR LICENSE ESCAPE=HTML>
 </rights>
-</TMPL_IF>
-</TMPL_IF>
-<TMPL_IF GUID>
-<id><TMPL_VAR GUID></id>
-<TMPL_ELSE>
-<id><TMPL_VAR PAGEURL></id>
-</TMPL_IF>
+[% END %]
+[% END %]
+[% IF guid %]
+<id>[% guid %]</id>
+[% ELSE %]
+<id>[% pageurl %]</id>
+[% END %]
 <subtitle type="html"><TMPL_VAR FEEDDESC ESCAPE=HTML></subtitle>
-<generator uri="http://ikiwiki.info/" version="<TMPL_VAR VERSION>">ikiwiki</generator>
-<updated><TMPL_VAR FEEDDATE></updated>
-<TMPL_VAR CONTENT>
+<generator uri="http://ikiwiki.info/" version="[% version %]">ikiwiki</generator>
+<updated>[% feeddate %]</updated>
+[% content %]
 </feed>

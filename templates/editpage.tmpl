@@ -1,31 +1,31 @@
-<TMPL_VAR JAVASCRIPT>
-<TMPL_VAR MESSAGE>
+[% javascript %]
+[% message %]
 <br />
-<TMPL_VAR FORM-START>
-<TMPL_VAR FIELD-DO>
-<TMPL_VAR FIELD-SID>
-<TMPL_VAR FIELD-FROM>
-<TMPL_VAR FIELD-RCSINFO>
-<TMPL_VAR FIELD-NEWFILE>
-<TMPL_IF NAME="PAGE_SELECT">
-<label for="page" class="inline">Page location:</label><TMPL_VAR FIELD-PAGE>
-<label for="type" class="inline">Page type:</label><TMPL_VAR FIELD-TYPE>
-<TMPL_ELSE>
-<TMPL_VAR FIELD-PAGE>
-<TMPL_VAR FIELD-TYPE>
-</TMPL_IF>
+[% form.start %]
+[% form.field.do %]
+[% form.field.sid %]
+[% form.field.from %]
+[% form.field.rcsinfo %]
+[% form.field.newfile %]
+[% IF page_select %]
+<label for="page" class="inline">Page location:</label>[% form.field.page %]
+<label for="type" class="inline">Page type:</label>[% form.field.type %]
+[% ELSE %]
+[% form.field.page %]
+[% form.field.type %]
+[% END %]
 <div class="editcontentdiv">
-<TMPL_VAR FIELD-EDITCONTENT><br />
+[% form.field.editcontent %]<br />
 </div>
-<TMPL_IF NAME="CAN_COMMIT">
+[% IF can_commit %]
 <label for="editmessage" class="block">Optional comment about this change:</label>
-<TMPL_VAR FIELD-EDITMESSAGE><br />
-</TMPL_IF>
-<TMPL_VAR FORM-SUBMIT>
-<TMPL_VAR HELPONFORMATTINGLINK>
-<TMPL_IF NAME="FIELD-ATTACHMENT">
+[% form.field.editmessage %]<br />
+[% END %]
+[% form.submit %]
+[% helponformattinglink %]
+[% IF field.attachment %]
 <a class="toggle" href="#attachments">Attachments</a>
-<div class="<TMPL_VAR ATTACHMENTS-CLASS>" id="attachments">
+<div class="[% form.attachments_class %]" id="attachments">
 <div id="fileupload"> 
 <script>
 $(function () { $('#fileupload').fileupload(); }); // initialize upload widget
@@ -55,34 +55,34 @@ $(function () { $('#fileupload').fileupload(); }); // initialize upload widget
 </script> 
 <div class="fileupload-content">
 <table class="files">
-<TMPL_LOOP NAME="ATTACHMENT_LIST">
-<tr><td><input type="checkbox" name="attachment_select" value="<TMPL_VAR NAME ESCAPE="HTML">" /><TMPL_VAR LINK></td><td><TMPL_VAR SIZE></td><td><TMPL_VAR MTIME></td></tr>
-</TMPL_LOOP>
+[% FOREACH attachment_list %]
+<tr><td><input type="checkbox" name="attachment_select" value="<[% FILTER html %][% name %][% END %]">" />[% link %]</td><td>[% size %]</td><td>[% mtime %]</td></tr>
+[% END %]
 </table>
 </div>
-<TMPL_VAR FIELD-ATTACHMENT>
-<noscript><TMPL_VAR FIELD-UPLOAD></noscript>
-<TMPL_VAR FIELD-LINK><TMPL_VAR FIELD-RENAME><TMPL_VAR FIELD-REMOVE>
+[% form.field.attachment %]
+<noscript>[% form.field.upload %]</noscript>
+[% form.field.link %][% form.field.rename %][% form.field.remove %]
 </div> 
 </div>
-</TMPL_IF>
-<TMPL_VAR FORM-END>
-<TMPL_VAR WMD_PREVIEW>
-<TMPL_IF NAME="PAGE_PREVIEW">
+[% END %]
+[% form.end %]
+[% wmd_preview %]
+[% IF page_preview %]
 <hr />
 <div class="header">
 <span>Page preview:</span>
 </div>
 <div id="preview">
-<TMPL_VAR PAGE_PREVIEW>
+[% page_preview %]
 </div>
-</TMPL_IF>
-<TMPL_IF NAME="PAGE_DIFF">
+[% END %]
+[% IF page_diff %]
 <hr />
 <div class="header">
 <span>Diff:</span>
 </div>
 <div id="diff">
-<TMPL_VAR PAGE_DIFF>
+[% page_diff %]
 </div>
-</TMPL_IF>
+[% END %]
