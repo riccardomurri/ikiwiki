@@ -47,6 +47,69 @@ Unless the C<--inplace> option is given, the converted content of each
 file is written to a file with the same name and a F<.TT> extension
 added.
 
+=head2 LIMITATIONS
+
+Conversion works by simply replacing patterns based on a regular
+expression.  There are however a few cases where HTML::Template and
+Template::Toolkit differ in the way they do things, and you'll have to
+patch that by hand.
+
+=over 4
+
+=item 
+
+In Template::Toolkit, an empty array evaluates to "true" in an IF clause.
+So, constructs like this:
+
+    <TMPL_IF stuff>
+      ...
+      <TMPL_LOOP stuff>
+
+are mechanically translated to:
+
+    [% IF stuff %]
+      ...
+      [% FOREACH stuff %]
+      ...
+
+but this results in the I<FOREACH> loop being always run, which was not intended.
+
+You need to patch the conversion to:
+
+    [% IF stuff.size %]
+      ...
+      [% FOREACH stuff %]
+      ...
+
+=item
+
+If a C<TMPL_VAR> directive contains the C<ESCAPE='html'> clause, it
+will not be converted.
+
+You have to manually change:
+
+    <TMPL_VAR ESCAPE="html" NAME="foo">
+
+to the Template::Toolkit equivalent:
+
+    [% FILTER html %][% foo %][% END %]
+
+
+=item
+
+If a C<TMPL_VAR> directive contains the C<DEFAULT=...> clause, it
+will not be converted.
+
+You have to manually change:
+
+    <TMPL_VAR DEFAULT='bar' NAME="foo">
+
+to the Template::Toolkit equivalent:
+
+    [% DEFAULT foo = 'bar' %][% foo %]
+
+
+=back
 
 =head1 DOWNLOAD
 
