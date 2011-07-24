@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 our $rcsid='$Id$';
-our $VERSION='1.0';
+our $VERSION='1.1';
 
 =pod
 
@@ -17,11 +17,16 @@ Options:
 
 =over 4
 
-=item -i, --inplace [I<EXT>]
+=item -i, --inplace 
 
-Replace each I<FILE> with the converted content; if an optional I<EXT>
-is given, back up the old file by appending I<EXT> to its name
-(similar to PERL's option C<-i>).
+Replace each I<FILE> with the converted content.
+A backup copy is saved only if used in conjunction 
+with the I<-b>/I<--backup> option.
+
+=item -b --backup I<EXT>
+
+Back up the old file by appending I<EXT> to its name.
+(Ignored if C<-i> is not specified.)
 
 =item --help         
 
@@ -139,10 +144,12 @@ sub in ($@);
 
 # provide default for options
 my $inplace = 0;
+my $backup;
 my $verbose = 0;
 Getopt::Long::Configure ('gnu_getopt', 'no_ignore_case');
 GetOptions (
-    'i|inplace:s' => \$inplace,
+    'i|inplace!'  => \$inplace,
+    'b|backup=s'  => \$backup,
     'verbose|v:+' => \$verbose,
     'help'        => sub { pod2usage(-verbose => $verbose); },
     'version|V'   => sub { print $PROGRAM_NAME ." ". $VERSION ."\n"; exit; }
@@ -187,13 +194,13 @@ foreach my $file (@ARGV) {
  
     # output
     my $output;
-    if ($inplace eq '') {
+    if ($inplace and not $backup) {
         # inplace subst w/ no backup
         $output = $file;
     }
     elsif ($inplace) {
         # inplace subst w/ backup
-        rename($file, $file . $inplace)
+        rename($file, $file . $backup)
             or die ("Cannot backup input file '$file': $!");
         $output = $file;
     }
