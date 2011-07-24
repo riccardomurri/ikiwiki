@@ -8,14 +8,14 @@
 <b>Successfully renamed [% src %] to [% dest %].</b>
 </p>
 <p>
-[% IF fixedlinks %]
+[% IF fixedlinks.size %]
 The following pages have been automatically modified to update their links to [% dest %]:
 <ul>
 [% FOREACH fixedlinks %]<li>[% page %]</li>[% END %]
 </ul>
 [% END %]
 [% IF brokenlinks_checked %]
-[% IF brokenlinks %]
+[% IF brokenlinks.size %]
 The following pages still link to [% src %]:
 <ul>
 [% FOREACH brokenlinks %]<li>[% page %]</li>[% END %]

@@ -70,7 +70,7 @@
 [% IF prefsurl %]
 <li><a href="[% prefsurl %]">Preferences</a></li>
 [% END %]
-[% IF actions %]
+[% IF actions.size %]
 [% FOREACH actions %]
 <li>[% action %]</li>
 [% END %]
@@ -86,7 +86,7 @@
 [% IF html5 %]</nav>[% ELSE %]</div>[% END %]
 [% END %]
 
-[% IF otherlanguages %]
+[% IF otherlanguages.size %]
 [% IF html5 %]<nav id="otherlanguages">[% ELSE %]<div id="otherlanguages">[% END %]
 <ul>
 [% FOREACH otherlanguages %]
@@ -138,7 +138,7 @@
 [% UNLESS dynamic %]
 [% IF html5 %]<nav id="pageinfo">[% ELSE %]<div id="pageinfo">[% END %]
 
-[% IF tags %]
+[% IF tags.size %]
 [% IF html5 %]<nav class="tags">[% ELSE %]<div class="tags">[% END %]
 Tags:
 [% FOREACH tags %]
@@ -147,13 +147,13 @@ Tags:
 [% IF html5 %]</nav>[% ELSE %]</div>[% END %]
 [% END %]
 
-[% IF backlinks %]
+[% IF backlinks.size %]
 [% IF html5 %]<nav id="backlinks">[% ELSE %]<div id="backlinks">[% END %]
 Links:
 [% FOREACH backlinks %]
 <a href="[% url %]">[% page %]</a>
 [% END %]
-[% IF more_backlinks %]
+[% IF more_backlinks.size %]
 <span class="popup">...
 <span class="balloon">
 [% FOREACH more_backlinks %]
